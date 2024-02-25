@@ -16,6 +16,8 @@ public class userServiceTests {
 
     private userService userService = new userService() ;
 
+    //Cenários de testes
+
 //AAA
     //1 -A arange
     @Test
@@ -39,7 +41,9 @@ public class userServiceTests {
     public void createUserFailed(){
         User user = new User("tallia", "123");
         userService.createUser(user);
-        assertThrows(Exception.class, () -> userService.createUser(user));
+
+        Exception exception = assertThrows(Exception.class, () -> userService.createUser(user));
+        assertEquals("Usuario ja existe", exception.getMessage());
 
     }
 
@@ -63,4 +67,34 @@ public class userServiceTests {
             userService.removeUser(user.getUsername());
         });
     }
+
+
+    @Test
+    public void buscarUsuarioPorUsernameSucess(){
+
+        User user = new User("tallia", "123");
+        userService.createUser(user);
+        User user2 = new User("tata", "1234");
+        userService.createUser(user2);
+
+        var users = userService.buscaUser(user.getUsername());
+
+        assertEquals(user.getUsername(), users.getUsername());
+
+    }
+
+
+    @Test
+    public void buscarUsuarioPorUsernameFailed(){
+
+        User user = new User("tallia", "123");
+        Exception exception = assertThrows(Exception.class, () ->{
+            userService.buscaUser(user.getUsername());
+        });
+        assertEquals("usuario  nao encontrado", exception.getMessage());
+
+    }
+
+
+
 }

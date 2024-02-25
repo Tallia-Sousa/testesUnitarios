@@ -24,14 +24,7 @@ public class userService {
 
     public List<User> removeUser(String Username) {
 
-        User userVar = null;
-        for (User user : listUsers) {
-            if (user.getUsername().equals(Username)) {
-                userVar = user;
-                break;
-            }
-        }
-
+        User userVar = buscaUser(Username);
         if (userVar != null) {
             listUsers.remove(userVar);
             return listUsers;
@@ -39,5 +32,24 @@ public class userService {
 
         throw new RuntimeException("Usuario invalido");
 
+    }
+
+
+    public User buscaUser(String Username) {
+        User userN = null;
+
+        for (User user : listUsers) {
+            if (user.getUsername().equals(Username)) {
+                userN = user;
+                break;
+            }
         }
+
+        if (userN != null) {
+            return userN;
+        }
+        throw new RuntimeException("usuario  nao encontrado");
+
+
+    }
 }

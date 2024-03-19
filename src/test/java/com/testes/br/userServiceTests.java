@@ -95,9 +95,8 @@ public class userServiceTests {
     }
 
 
-
 @Test
-    public void ordenaUsersPorNome(){
+    public void ordenaUsersPorNum(){
     User user1 = new User("tallia01", "123",3);
     User user2 = new User("tallia02", "123",9);
     User user3 = new User("tallia03", "123",1);
@@ -106,14 +105,11 @@ public class userServiceTests {
     listusers.add(user2);
     listusers.add(user3);
     List<User> result = userService.ordenarLista(listusers);
-    assertEquals(user3.getContador(),result.get(0).getContador());
+    assertEquals(user3,result.get(0));
 
-    assertEquals(user2.getContador(),result.get(2).getContador());
+    assertEquals(user2,result.get(2));
 
-    assertEquals(user1.getContador(),result.get(1).getContador());
-
-
-
+    assertEquals(user1,result.get(1));
 
 }
 

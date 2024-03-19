@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,7 +25,8 @@ public class userServiceTests {
     public void createUserSucess(){
 
         //1-A organiza os dados
-        User user = new User("tallia", "123");
+        User user = new User("tallia", "123", 1);
+
         //2-A = agir
         List<User> result = userService.createUser(user);
       // 3-A onde usa o assertion e faz as verificaçoes
@@ -39,17 +41,18 @@ public class userServiceTests {
 
     @Test
     public void createUserFailed(){
-        User user = new User("tallia", "123");
+        User user = new User("tallia", "123", 2);
         userService.createUser(user);
+        User user3 = new User("tallia", "123",2);
 
-        Exception exception = assertThrows(Exception.class, () -> userService.createUser(user));
+        Exception exception = assertThrows(Exception.class, () -> userService.createUser(user3));
         assertEquals("Usuario ja existe", exception.getMessage());
 
     }
 
     @Test
     public void removeUsersSucess(){
-        User user = new User("tallia", "123");
+        User user = new User("tallia", "123", 1);
         userService.createUser(user);
 
         List<User> userResult = userService.removeUser(user.getUsername());
@@ -61,10 +64,11 @@ public class userServiceTests {
     @Test
     public void removeUsersFailed(){
 
-        User user = new User("tallia", "123");
+        User user = new User("tallia", "123",3);
 
-        assertThrows(RuntimeException.class, () -> {
+        Exception exception = assertThrows(RuntimeException.class, () -> {
             userService.removeUser(user.getUsername());
+            
         });
     }
 
@@ -72,29 +76,45 @@ public class userServiceTests {
     @Test
     public void buscarUsuarioPorUsernameSucess(){
 
-        User user = new User("tallia", "123");
-        userService.createUser(user);
-        User user2 = new User("tata", "1234");
-        userService.createUser(user2);
+            User user = new User("tallia", "123",4);
+            userService.createUser(user);
 
-        var users = userService.buscaUser(user.getUsername());
+            var buscarUser = userService.buscarUserr(user.getUsername());
 
-        assertEquals(user.getUsername(), users.getUsername());
-
-    }
-
+            assertEquals(user.getUsername(),buscarUser.getUsername() );
+        }
 
     @Test
     public void buscarUsuarioPorUsernameFailed(){
 
-        User user = new User("tallia", "123");
-        Exception exception = assertThrows(Exception.class, () ->{
-            userService.buscaUser(user.getUsername());
-        });
-        assertEquals("usuario  nao encontrado", exception.getMessage());
+        User user = new User("tallia", "123",5);
+          User userNull =  userService.buscarUserr(user.getUsername());
+
+        assertEquals(userNull, null);
 
     }
 
 
+
+@Test
+    public void ordenaUsersPorNome(){
+    User user1 = new User("tallia01", "123",3);
+    User user2 = new User("tallia02", "123",9);
+    User user3 = new User("tallia03", "123",1);
+    List<User> listusers = new ArrayList<>();
+    listusers.add(user1);
+    listusers.add(user2);
+    listusers.add(user3);
+    List<User> result = userService.ordenarLista(listusers);
+    assertEquals(user3.getContador(),result.get(0).getContador());
+
+    assertEquals(user2.getContador(),result.get(2).getContador());
+
+    assertEquals(user1.getContador(),result.get(1).getContador());
+
+
+
+
+}
 
 }

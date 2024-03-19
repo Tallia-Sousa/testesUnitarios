@@ -4,7 +4,10 @@ import com.testes.br.user.User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class userService {
@@ -24,7 +27,7 @@ public class userService {
 
     public List<User> removeUser(String Username) {
 
-        User userVar = buscaUser(Username);
+        User userVar = buscarUserr(Username);
         if (userVar != null) {
             listUsers.remove(userVar);
             return listUsers;
@@ -35,21 +38,22 @@ public class userService {
     }
 
 
-    public User buscaUser(String Username) {
-        User userN = null;
 
-        for (User user : listUsers) {
-            if (user.getUsername().equals(Username)) {
-                userN = user;
-                break;
-            }
-        }
 
-        if (userN != null) {
-            return userN;
-        }
-        throw new RuntimeException("usuario  nao encontrado");
 
+    public User buscarUserr(String username) {
+
+        Optional<User> userN = listUsers.stream().filter(user ->
+                user.getUsername().equals(username))
+                .findAny();
+
+        return userN.orElse(null);
 
     }
-}
+
+    public List<User> ordenarLista(List<User > list){
+
+         list.sort(Comparator.comparingInt(User::getContador));
+         return list;
+    }
+    }
